@@ -6,6 +6,7 @@ public class Tree {
 
     private Node[] boom;
     private int size;
+    private int aantalloops;
 
     private String[][] rooster;
 
@@ -13,6 +14,7 @@ public class Tree {
         this.size = size;
         this.boom = boom;
         rooster = new String[size][size];
+        aantalloops = 0;
     }
 
     public void maxPalindrome (){
@@ -39,13 +41,16 @@ public class Tree {
             }
             System.out.print("\n");
         }
+        System.out.println("Er zijn " + aantalloops + " loops genomen");
     }
 
     private ArrayList<NextIt> functietje(int start, int end){
         if(start == end){
             rooster[start][end] = boom[start].getLabel() + "";
+            aantalloops++;
         } else if (rooster[start][end] == null && contains(boom[start].getBuren(), boom[start].getAantalBuren(), end) && (boom[start].getLabel() == boom[end].getLabel())){
             rooster[start][end] = boom[start].getLabel() + "" + boom[start].getLabel();
+            aantalloops++;
         } else {
             if(boom[start].getLabel() == boom[end].getLabel()){
                 for (int i : boom[start].getBuren()) {
@@ -54,6 +59,7 @@ public class Tree {
                             if((rooster[start][end] == null) ||
                                     (rooster[start][end] != null && (rooster[i][j].length() + 2 > rooster[start][end].length()))){
                                 rooster[start][end] = boom[start].getLabel() + rooster[i][j] + boom[start].getLabel();
+                                aantalloops++;
                             }
                         }
                     }
