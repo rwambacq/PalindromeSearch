@@ -7,7 +7,7 @@ public class Node {
     private char label;
     private int[] pointedFrom;
 
-    public Node (int aantalBuren, int[] buren, char label){
+    public Node(int aantalBuren, int[] buren, char label) {
         this.aantalBuren = aantalBuren;
         this.buren = buren;
         this.label = label;

@@ -17,10 +17,10 @@ public class DAG {
             String input = br.readLine();
             boolean done = false;
 
-            while(!done){
+            while (!done) {
                 dag.getTree(br, input);
                 input = br.readLine();      // Neemt nieuwe input, indien deze leeg is, wordt uit de loop gegaan, anders wordt opnieuw in de loop gegaan en wordt de nieuwe input in getTree gestoken.
-                if(input.equals("")){
+                if (input.equals("")) {
                     done = true;
                 }
             }
@@ -39,7 +39,7 @@ public class DAG {
 
     }
 
-    public void getTree(BufferedReader br, String input){
+    public void getTree(BufferedReader br, String input) {
 
         try {
             int n = Integer.parseInt(input);
@@ -71,7 +71,7 @@ public class DAG {
                 nodes[i] = toAdd;
             }
             for (int o = 0; o < n; o++) {
-                nodes[o].setPointedFrom(((List<Integer>)pointedFrom[o]).stream().mapToInt(i -> i).toArray());
+                nodes[o].setPointedFrom(((List<Integer>) pointedFrom[o]).stream().mapToInt(i -> i).toArray());
             }
             Tree boom = new Tree(n, nodes);
 
