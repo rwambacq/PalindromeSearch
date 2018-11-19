@@ -15,18 +15,13 @@ public class DAG {
         try {
             br = new BufferedReader(new InputStreamReader(System.in));
             String input = br.readLine();
-            boolean done = false;
 
-            while (!done) {
+            while (true) {
                 dag.getTree(br, input);
-                input = br.readLine();      // Neemt nieuwe input, indien deze leeg is, wordt uit de loop gegaan, anders wordt opnieuw in de loop gegaan en wordt de nieuwe input in getTree gestoken.
-                if (input.equals("")) {
-                    done = true;
-                }
+                input = br.readLine();
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         } finally {
             if (br != null) {
                 try {
@@ -74,13 +69,6 @@ public class DAG {
                 nodes[o].setPointedFrom(((List<Integer>) pointedFrom[o]).stream().mapToInt(i -> i).toArray());
             }
             Tree boom = new Tree(n, nodes);
-
-                        /*System.out.println("This tree has size " + boom.getSize());
-                        System.out.println("");
-                        System.out.println("De labels zijn: ");
-                        for (Node node : boom.getBoom()) {
-                            System.out.println("" + node.getLabel());
-                        }*/
             boom.maxPalindrome();
 
         } catch (IOException e) {

@@ -39,7 +39,7 @@ public class Intersection {
 
     public char[] intersection(ArrayList<String> strings) {
 
-        if((strings.size() != 0)) {
+        if ((strings.size() != 0)) {
             long allemaalSamenNu;
             allemaalSamenNu = stringToLong(strings.get(0));
 

@@ -1,6 +1,5 @@
 package palindrome;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Tree {
@@ -51,32 +50,32 @@ public class Tree {
         Intersection is = new Intersection();
         char[] doorsnede = is.intersection(longestStrings);
 
-        String finalOutput = "";
+        String[] finalOutput = new String[3];
 
         String eindString;
 
-        if(! longestStrings.isEmpty()){
-            finalOutput += longestStrings.get(0).length() + " ";
+        if (!longestStrings.isEmpty()) {
+            finalOutput[0] = longestStrings.get(0).length() + "";
         } else {
-            finalOutput += "0 ";
+            finalOutput[0] = "0";
         }
 
-        if(doorsnede.length > 0){
-            finalOutput += new String(doorsnede) + " ";
+        if (doorsnede.length > 0) {
+            finalOutput[1] = new String(doorsnede);
         } else {
-            finalOutput += "/ ";
+            finalOutput[1] = "/";
         }
 
-        if(! longestStrings.isEmpty()) {
+        if (!longestStrings.isEmpty()) {
             int maxlengte = longestStrings.get(0).length();
             String[] toBeJoined = new String[maxlengte];
             for (int i = 0; i < maxlengte; i++) {
                 toBeJoined[i] = resultaat.get(0).get(i) + "";
             }
-            finalOutput += String.join(" ", toBeJoined);
+            finalOutput[2] = String.join(" ", toBeJoined);
         }
 
-        System.out.println(finalOutput);
+        System.out.println(String.join(" ", finalOutput));
     }
 
     private ArrayList<NextIt> functietje(int start, int end) {
@@ -91,9 +90,9 @@ public class Tree {
             if (boom[start].getLabel() == boom[end].getLabel()) {
                 for (int i : boom[start].getBuren()) {
                     for (int j : boom[end].getPointedFrom()) {
-                        if (! rooster[i][j].isEmpty()) {
+                        if (!rooster[i][j].isEmpty()) {
                             if ((rooster[start][end].isEmpty()) ||
-                                    ((! rooster[start][end].isEmpty()) && (rooster[i][j].size() + 2 > rooster[start][end].size()))) {
+                                    ((!rooster[start][end].isEmpty()) && (rooster[i][j].size() + 2 > rooster[start][end].size()))) {
                                 rooster[start][end] = new ArrayList<Integer>(rooster[i][j]);
                                 rooster[start][end].add(0, start);
                                 rooster[start][end].add(end);
@@ -131,13 +130,13 @@ public class Tree {
         return boom;
     }
 
-    public ArrayList<ArrayList<Integer>> longestStringsInArray (ArrayList<Integer>[][] strings){
+    public ArrayList<ArrayList<Integer>> longestStringsInArray(ArrayList<Integer>[][] strings) {
 
         ArrayList<Integer> longest = new ArrayList<>();
 
         for (int i = 0; i < strings.length; i++) {
             for (int j = 0; j < strings.length; j++) {
-                if((! strings[i][j].isEmpty()) && (strings[i][j].size() > longest.size())){
+                if ((!strings[i][j].isEmpty()) && (strings[i][j].size() > longest.size())) {
                     longest = strings[i][j];
                 }
             }
@@ -148,8 +147,8 @@ public class Tree {
 
         for (int v = 0; v < strings.length; v++) {
             for (int w = 0; w < strings.length; w++) {
-                if(! strings[v][w].isEmpty()){
-                    if((! strings[v][w].equals(longest)) && (strings[v][w].size() == longest.size())){
+                if (!strings[v][w].isEmpty()) {
+                    if ((!strings[v][w].equals(longest)) && (strings[v][w].size() == longest.size())) {
                         evenLang.add(strings[v][w]);
                     }
 
