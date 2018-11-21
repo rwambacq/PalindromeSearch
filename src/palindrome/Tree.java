@@ -19,13 +19,34 @@ public class Tree {
         }
     }
 
+    public void withoutCycles(){
+        for (int i = 0; i < size; i++) {
+            rooster[i][i].palindromen.add(new Palindrome());
+            rooster[i][i].palindromen.get(0).palindroom.add(i);
+            //Dit was nodig omdat ArrayLists van ArrayLists blijkbaar te abstract zijn voor java, ook al werkt het verder in de code wel, ik snap er niets van
+        }
+        maxPalindrome();
+    }
+
+    public void withCycles(){
+        for (int i = 0; i < size; i++) {
+            fillPalindromeMatrix(i, i);
+        }
+        boolean palindromicCycle = false;
+        for (int i = 0; i < size; i++) {
+            if (rooster[i][i].palindromen.get(0).palindroom.size() > 1) {
+                palindromicCycle = true;
+            }
+        }
+        if(palindromicCycle){
+            System.out.println("0 / ");
+        } else {
+            maxPalindrome();
+        }
+    }
+
     public void maxPalindrome() {
         if(size > 0) {
-            for (int i = 0; i < size; i++) {
-                rooster[i][i].palindromen.add(new Palindrome());
-                rooster[i][i].palindromen.get(0).palindroom.add(i);
-                //Dit was nodig omdat ArrayLists van ArrayLists te abstract zijn voor java
-            }
 
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
@@ -34,7 +55,6 @@ public class Tree {
                     }
                 }
             }
-
 
             ArrayList<Palindrome> resultaat = longestStringsInArray();
 

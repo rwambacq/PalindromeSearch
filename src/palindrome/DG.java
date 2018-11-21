@@ -3,12 +3,8 @@ package palindrome;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
-public class DAG {
-
-
+public class DG {
     public static void main(String[] args) {
         BufferedReader br = null;
         TreeIO tio = new TreeIO();
@@ -18,7 +14,7 @@ public class DAG {
 
             while (true) {
                 Tree boom = tio.getTree(br, input);
-                boom.withoutCycles();
+                boom.withCycles();
                 input = br.readLine();
             }
 
@@ -34,5 +30,4 @@ public class DAG {
         }
 
     }
-
 }
