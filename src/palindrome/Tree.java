@@ -1,17 +1,22 @@
 package palindrome;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Tree {
 
     private Node[] boom;
     private int size;
     private Palindromes[][] rooster;
+    private HashMap<Integer, ArrayList<Integer>> tbd;
+    boolean tbdfound;
 
     public Tree(int size, Node[] boom) {
         this.size = size;
         this.boom = boom;
         rooster = new Palindromes[size][size];
+        tbd = new HashMap<>();
+        tbdfound = false;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 rooster[i][j] = new Palindromes();
@@ -29,25 +34,30 @@ public class Tree {
     }
 
     public void withCycles(){
-        for (int i = 0; i < size; i++) {
+        int i = 0;
+        while ((i < size) && !tbdfound) {
             fillPalindromeMatrix(i, i);
+            i++;
         }
-        boolean palindromicCycle = false;
-        for (int i = 0; i < size; i++) {
-            if (rooster[i][i].palindromen.get(0).palindroom.size() > 1) {
-                palindromicCycle = true;
+        if(! tbdfound) {
+            boolean palindromicCycle = false;
+            for (int j = 0; j < size; j++) {
+                if (rooster[j][j].palindromen.get(0).palindroom.size() > 1) {
+                    palindromicCycle = true;
+                }
             }
-        }
-        if(palindromicCycle){
-            System.out.println("0 / ");
+            if (palindromicCycle) {
+                System.out.println("0 / ");
+            } else {
+                maxPalindrome();
+            }
         } else {
-            maxPalindrome();
+            System.out.println("0 / ");
         }
     }
 
     public void maxPalindrome() {
         if(size > 0) {
-
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                     if (j != i) {
@@ -95,46 +105,56 @@ public class Tree {
     }
 
     public void fillPalindromeMatrix(int start, int end){
-        if(rooster[start][end].palindromen.isEmpty()){
-            Node s = boom[start];
-            Node e = boom[end];
-            if(s.getLabel() == e.getLabel()){
-                if(contains(s.getBuren(), end)){
-                    ArrayList<Palindrome> longestBetween = new ArrayList<>();
-                    for (int b : s.getBuren()) {
-                        if(b != end) {
-                            for (int f : e.getPointedFrom()) {
-                                if(f != start){
-                                    longestBetween = getPalindromes(longestBetween, b, f);
+        if((tbd.get(start) == null) || (! tbd.get(start).contains(end) && (!tbdfound))) {
+            tbd.computeIfAbsent(start, k -> new ArrayList<>());
+            tbd.get(start).add(end);
+            if (rooster[start][end].palindromen.isEmpty()) {
+                Node s = boom[start];
+                Node e = boom[end];
+                if (s.getLabel() == e.getLabel()) {
+                    if (contains(s.getBuren(), end)) {
+                        ArrayList<Palindrome> longestBetween = new ArrayList<>();
+                        for (int b : s.getBuren()) {
+                            if (b != end) {
+                                for (int f : e.getPointedFrom()) {
+                                    if (f != start) {
+                                        longestBetween = getPalindromes(longestBetween, b, f);
+                                    }
                                 }
                             }
                         }
-                    }
-                    if(longestBetween.isEmpty()){
-                        rooster[start][end].palindromen.add(new Palindrome());
-                        rooster[start][end].palindromen.get(0).palindroom.add(start);
-                        rooster[start][end].palindromen.get(0).palindroom.add(end);
+                        if (longestBetween.isEmpty()) {
+                            rooster[start][end].palindromen.add(new Palindrome());
+                            rooster[start][end].palindromen.get(0).palindroom.add(start);
+                            rooster[start][end].palindromen.get(0).palindroom.add(end);
+                            tbd.get(start).remove((Integer)end);
+                        } else {
+                            addToPalindromeList(start, end, longestBetween);
+                        }
                     } else {
-                        addToPalindromeList(start, end, longestBetween);
-                    }
-                } else {
-                    ArrayList<Palindrome> longestBetween = new ArrayList<>();
-                    for (int b : s.getBuren()) {
+                        ArrayList<Palindrome> longestBetween = new ArrayList<>();
+                        for (int b : s.getBuren()) {
                             for (int f : e.getPointedFrom()) {
                                 longestBetween = getPalindromes(longestBetween, b, f);
                             }
+                        }
+                        if (longestBetween.isEmpty()) {
+                            rooster[start][end].palindromen.add(new Palindrome());
+                            rooster[start][end].palindromen.get(0).palindroom.add(-1);
+                            tbd.get(start).remove((Integer)end);
+                        } else {
+                            addToPalindromeList(start, end, longestBetween);
+                            tbd.get(start).remove((Integer)end);
+                        }
                     }
-                    if(longestBetween.isEmpty()){
-                        rooster[start][end].palindromen.add(new Palindrome());
-                        rooster[start][end].palindromen.get(0).palindroom.add(-1);
-                    } else {
-                        addToPalindromeList(start, end, longestBetween);
-                    }
+                } else {
+                    tbd.get(start).remove((Integer)end);
+                    rooster[start][end].palindromen.add(new Palindrome());
+                    rooster[start][end].palindromen.get(0).palindroom.add(-1);
                 }
-            } else {
-                rooster[start][end].palindromen.add(new Palindrome());
-                rooster[start][end].palindromen.get(0).palindroom.add(-1);
             }
+        } else {
+            tbdfound = true;
         }
     }
 
@@ -144,23 +164,28 @@ public class Tree {
             rooster[start][end].palindromen.get(p).palindroom.add(start);
             rooster[start][end].palindromen.get(p).palindroom.addAll(longestBetween.get(p).palindroom);
             rooster[start][end].palindromen.get(p).palindroom.add(end);
+            tbd.get(start).remove((Integer)end);
         }
     }
 
     private ArrayList<Palindrome> getPalindromes(ArrayList<Palindrome> longestBetween, int b, int f) {
-        if(rooster[b][f].palindromen.isEmpty()){
-            fillPalindromeMatrix(b, f);
-            longestBetween = getPalindromes(longestBetween, b, f);
-        } else {
-            if(rooster[b][f].palindromen.get(0).palindroom.get(0) != -1){
-                if(longestBetween.isEmpty() || rooster[b][f].palindromen.get(0).palindroom.size() > longestBetween.get(0).palindroom.size()) {
-                    longestBetween = rooster[b][f].palindromen;
-                } else if (rooster[b][f].palindromen.get(0).palindroom.size() == longestBetween.get(0).palindroom.size()){
-                    longestBetween.addAll(rooster[b][f].palindromen);
+        if(!tbdfound) {
+            if (rooster[b][f].palindromen.isEmpty()) {
+                fillPalindromeMatrix(b, f);
+                longestBetween = getPalindromes(longestBetween, b, f);
+            } else {
+                if (rooster[b][f].palindromen.get(0).palindroom.get(0) != -1) {
+                    if (longestBetween.isEmpty() || rooster[b][f].palindromen.get(0).palindroom.size() > longestBetween.get(0).palindroom.size()) {
+                        longestBetween = rooster[b][f].palindromen;
+                    } else if (rooster[b][f].palindromen.get(0).palindroom.size() == longestBetween.get(0).palindroom.size()) {
+                        longestBetween.addAll(rooster[b][f].palindromen);
+                    }
                 }
             }
+            return longestBetween;
+        } else {
+            return longestBetween;
         }
-        return longestBetween;
     }
 
     private boolean contains(int[] lijst, int el) {

@@ -18,7 +18,9 @@ public class DG {
                 input = br.readLine();
             }
 
-        } catch (Exception ignored) {
+        } catch (NumberFormatException ignored){}
+        catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (br != null) {
                 try {
