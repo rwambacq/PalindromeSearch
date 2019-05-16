@@ -1,14 +1,25 @@
 package palindrome;
 
+import datastructuren.DirectedGraph;
+import hulpklassen.TreeIO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Directed Acyclic Graph class.
+ * Deze klasse wordt gebruikt om het langste palindromisch pad te vinden in een gerichte acyclisch graaf.
+ *
+ * @author Ruben Wambacq
+ *
+ */
 public class DAG {
 
-
+    /**
+     * Main methode, start een loop die input vraagt in de vorm van een graaf en daarna de langste palindromische paden als output geeft
+     * @param args standaard main argument
+     */
     public static void main(String[] args) {
         BufferedReader br = null;
         TreeIO tio = new TreeIO();
@@ -17,7 +28,7 @@ public class DAG {
             String input = br.readLine();
 
             while (true) {
-                Tree boom = tio.getTree(br, input);
+                DirectedGraph boom = tio.getTree(br, input);
                 boom.withoutCycles();
                 input = br.readLine();
             }
